@@ -1,4 +1,4 @@
-import { IEDialog } from "../components/Dialog/IEDialog";
+import { IEDialog } from "../src/Dialog/IEDialog";
 
 /**
  * 基础弹窗示例

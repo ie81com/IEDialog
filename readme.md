@@ -26,6 +26,7 @@ npm install iedialog
 
 ```typescript
 import { IEDialog } from 'iedialog';
+import 'iedialog/iedialog.css';
 ```
 
 ### 基础用法
