@@ -8,7 +8,7 @@ export default defineConfig({
     emptyOutDir: true,
     // 库模式配置
     lib: {
-      entry: 'src/components/Dialog/IEDialog.ts',
+      entry: 'src/IEDialog.ts',
       name: 'IEDialog',
       fileName: 'iedialog',
       formats: ['es', 'umd']
