@@ -1,6 +1,6 @@
 {
   "name": "iedialog",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "type": "module",
   "description": "一个轻量级、功能丰富的弹窗组件，支持模态框、消息提示、媒体预览等功能。",
   "keywords": [
