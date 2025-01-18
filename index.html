@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IEDialog 弹窗组件示例</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      padding: 20px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .demo-section {
+      margin: 30px 0;
+      padding: 20px;
+      border: 1px solid #eee;
+      border-radius: 8px;
+    }
+
+    .demo-title {
+      font-size: 20px;
+      margin-bottom: 16px;
+      color: #333;
+      font-weight: 500;
+    }
+
+    .demo-desc {
+      color: #666;
+      margin-bottom: 16px;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    button {
+      padding: 8px 16px;
+      margin: 5px;
+      border: none;
+      border-radius: 4px;
+      background: #2196f3;
+      color: white;
+      cursor: pointer;
+      transition: background 0.2s;
+      font-size: 14px;
+    }
+
+    button:hover {
+      background: #1976d2;
+    }
+
+    .btn-group {
+      margin: 10px 0;
+    }
+
+    .btn-group button {
+      margin-right: 10px;
+    }
+
+    /* 自定义 HTML 内容样式 */
+    .custom-dialog-content {
+      padding: 24px;
+      color: #333;
+    }
+    .custom-dialog-content h3 {
+      margin: 0 0 20px 0;
+      font-size: 18px;
+      font-weight: 500;
+      color: #1a1a1a;
+    }
+    .custom-dialog-content .section {
+      margin-bottom: 24px;
+    }
+    .custom-dialog-content p {
+      margin: 0 0 16px 0;
+      line-height: 1.6;
+      color: #666;
+    }
+    .custom-dialog-content ul {
+      margin: 0;
+      padding-left: 20px;
+    }
+    .custom-dialog-content li {
+      margin: 8px 0;
+      color: #666;
+      line-height: 1.6;
+    }
+    .custom-dialog-content .code-block {
+      background: #f6f8fa;
+      border: 1px solid #eaecef;
+      border-radius: 6px;
+      padding: 16px;
+      margin: 16px 0;
+    }
+    .custom-dialog-content code {
+      font-family: Consolas, Monaco, 'Courier New', monospace;
+      font-size: 14px;
+      color: #476582;
+    }
+    .custom-dialog-content .feature-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .custom-dialog-content .feature-item {
+      background: #f8f9fa;
+      border-radius: 6px;
+      padding: 12px;
+      color: #666;
+    }
+
+    /* 自定义表单样式 */
+    .custom-form-content {
+      padding: 24px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .custom-form-content form {
+      width: 100%;
+      text-align: left;
+    }
+    .custom-form-content .form-group {
+      margin-bottom: 20px;
+      width: 100%;
+      text-align: left;
+    }
+    .custom-form-content label {
+      display: block;
+      margin-bottom: 8px;
+      color: #333;
+      font-weight: 500;
+      text-align: left;
+    }
+    .custom-form-content input,
+    .custom-form-content textarea {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+      line-height: 1.5;
+      transition: border-color 0.2s;
+      text-align: left;
+      display: block;
+      box-sizing: border-box;
+      margin: 0;
+    }
+    .custom-form-content input:focus,
+    .custom-form-content textarea:focus {
+      border-color: #2196f3;
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.1);
+    }
+    .custom-form-content textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+    .custom-form-content .form-tip {
+      margin-top: 4px;
+      font-size: 12px;
+      color: #999;
+      text-align: left;
+    }
+
+    /* 覆盖弹窗内容的默认居中样式 */
+    .dialog-content .custom-form-content {
+      width: 100%;
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>IEDialog 弹窗组件示例</h1>
+
+  <div class="demo-section">
+    <div class="demo-title">基础弹窗</div>
+    <div class="demo-desc">最基本的弹窗，可以自定义标题和内容。支持显示/隐藏图标、关闭按钮等。</div>
+    <div class="btn-group">
+      <button id="basic-dialog">基本弹窗</button>
+      <button id="no-close-dialog">无关闭按钮</button>
+      <button id="with-icon-dialog">显示图标</button>
+      <button id="custom-width-dialog">自定义宽度</button>
+      <button id="long-text-dialog">超长文本</button>
+    </div>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-title">不同风格</div>
+    <div class="demo-desc">弹窗支持四种不同的风格：info、success、warning、error，每种风格都有对应的图标和颜色。</div>
+    <div class="btn-group">
+      <button id="info-dialog">信息弹窗</button>
+      <button id="success-dialog">成功弹窗</button>
+      <button id="warning-dialog">警告弹窗</button>
+      <button id="error-dialog">错误弹窗</button>
+    </div>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-title">交互功能</div>
+    <div class="demo-desc">支持确认/取消按钮，可以自定义按钮文本和回调函数。支持点击遮罩层关闭。</div>
+    <div class="btn-group">
+      <button id="confirm-dialog">确认操作</button>
+      <button id="custom-btn-dialog">自定义按钮</button>
+      <button id="no-mask-close-dialog">禁止遮罩关闭</button>
+      <button id="no-footer-dialog">无底部按钮</button>
+    </div>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-title">消息提示</div>
+    <div class="demo-desc">轻量级的消息反馈，支持自动关闭和手动关闭。可以设置显示时间。</div>
+    <div class="btn-group">
+      <button id="message-info">信息提示</button>
+      <button id="message-success">成功提示</button>
+      <button id="message-warning">警告提示</button>
+      <button id="message-error">错误提示</button>
+    </div>
+    <div class="btn-group">
+      <button id="message-long">较长显示时间</button>
+      <button id="message-no-auto">不自动关闭</button>
+      <button id="message-no-close">无关闭按钮</button>
+      <button id="message-with-icon">不显示图标</button>
+    </div>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-title">媒体预览</div>
+    <div class="demo-desc">支持图片和视频预览，可以自定义预览窗口的大小，支持多媒体轮播、混合预览等功能。</div>
+    <div class="btn-group">
+      <!-- 图片预览 -->
+      <button id="image-dialog">多图片预览</button>
+      <button id="image-custom-size">自定义尺寸图片</button>
+      <button id="single-image">单张图片预览</button>
+    </div>
+    <div class="btn-group">
+      <!-- 视频预览 -->
+      <button id="video-dialog">多视频预览</button>
+      <button id="video-custom-size">自定义尺寸视频</button>
+    </div>
+    <div class="btn-group">
+      <!-- 混合媒体 -->
+      <button id="mixed-media">图片视频混合预览</button>
+      <button id="start-from-index">指定索引开始预览</button>
+      <button id="media-error">媒体加载失败示例</button>
+    </div>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-title">Loading 加载</div>
+    <div class="demo-desc">显示加载中状态，支持自定义文本。常用于异步操作的等待提示。</div>
+    <div class="btn-group">
+      <button id="loading-dialog">默认加载</button>
+      <button id="loading-text-dialog">自定义文本</button>
+    </div>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-title">自定义 HTML 内容</div>
+    <div class="demo-desc">支持在弹窗中使用自定义的 HTML 内容，可以创建更丰富的交互界面。</div>
+    <div class="btn-group">
+      <button id="custom-html-dialog">HTML 示例</button>
+      <button id="form-dialog">表单示例</button>
+    </div>
+  </div>
+
+  <script type="module" src="/src/examples/example.ts"></script>
+</body>
+
+</html>
