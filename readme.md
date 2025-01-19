@@ -14,6 +14,11 @@
 - 🎭 支持自定义 HTML 内容和表单
 - 🔄 支持进度条倒计时
 
+## 演示地址
+```
+https://codepen.io/ie81com/pen/azojGvM
+```
+
 ## 安装
 
 ```bash
