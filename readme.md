@@ -15,9 +15,8 @@
 - 🔄 支持进度条倒计时
 
 ## 演示地址
-```
-https://codepen.io/ie81com/pen/azojGvM
-```
+
+[在 CodePen 查看演示](https://codepen.io/ie81com/pen/azojGvM)
 
 ## 安装
 
