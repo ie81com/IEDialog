@@ -235,12 +235,17 @@ $icon-image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewB
 // 应用统一样式
 .dialog-close {
   @extend %close-button;
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  z-index: 1;
 }
 
 .message-close {
   @extend %close-button;
   width: 24px;
   height: 24px;
+  margin-left: 8px;
 
   &::before {
     width: 16px;
@@ -251,8 +256,8 @@ $icon-image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewB
 .media-close {
   @extend %close-button;
   position: absolute;
-  top: 16px;
   right: 16px;
+  top: 16px;
   background-color: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(4px);
   color: rgba(255, 255, 255, 0.9);

@@ -27,16 +27,16 @@ interface DialogOptions {
     type?: DialogType;
     /** 弹窗风格 */
     style?: DialogStyle;
-    /** 弹窗标题 */
-    title?: string;
+    /** 弹窗标题，设置为 false 时不显示标题栏 */
+    title?: string | false;
     /** 弹窗内容 */
     content: string;
     /** 是否显示关闭按钮 */
     showClose?: boolean;
-    /** 确认按钮文本 */
-    confirmText?: string;
-    /** 取消按钮文本 */
-    cancelText?: string;
+    /** 确认按钮文本，设置为 false 时不显示按钮 */
+    confirmText?: string | false;
+    /** 取消按钮文本，设置为 false 时不显示按钮 */
+    cancelText?: string | false;
     /** 弹窗宽度 */
     width?: string;
     /** 是否显示遮罩层 */
@@ -53,8 +53,6 @@ interface DialogOptions {
     mediaList?: MediaItem[];
     /** 当前媒体索引 */
     currentIndex?: number;
-    /** 是否显示底部按钮 */
-    showFooter?: boolean;
     /** 媒体加载错误回调 */
     onMediaError?: () => void;
     /** 消息框自动关闭时间（毫秒） */
@@ -87,7 +85,6 @@ export class IEDialog {
         width: "300px",
         showMask: true,
         maskClosable: true,
-        showFooter: true,
         duration: 3000,
     };
 
@@ -96,18 +93,15 @@ export class IEDialog {
         modal: {
             showMask: true,
             showClose: true,
-            showFooter: true,
             maskClosable: true,
         },
         message: {
             showMask: false,
             showClose: true,
-            showFooter: false,
             maskClosable: false,
         },
         media: {
             title: "媒体预览",
-            showFooter: false,
             width: "40%",
             showClose: true,
             maskClosable: true,
@@ -116,8 +110,6 @@ export class IEDialog {
         loading: {
             showMask: true,
             showClose: false,
-            showFooter: false,
-            maskClosable: false,
             showIcon: false,
         },
     };
@@ -134,10 +126,12 @@ export class IEDialog {
     constructor(options: DialogOptions) {
         const type = options.type || "modal";
         const style = options.style || "default";
+        const defaultTitle = IEDialog.styles[style].title;
+
         this.options = {
             ...IEDialog.defaults,
             ...IEDialog.presets[type],
-            title: options.title || IEDialog.styles[style].title,
+            title: options.title === false ? false : (options.title || defaultTitle),
             showIcon: style !== 'default',
             ...options,
         };
@@ -199,41 +193,60 @@ export class IEDialog {
     /**
      * 获取弹窗头部 HTML
      * 包含标题和关闭按钮（如果启用）
-     * @returns 对于媒体类型和 loading 类型返回空字符串，否则返回头部 HTML
+     * @returns 对于媒体类型、loading类型时返回空字符串，否则返回头部 HTML
      */
     private getHeaderHtml(): string {
         const isMediaDialog = this.options.type === "media";
         const isLoading = this.options.type === "loading";
 
+        // 特殊类型不显示头部
         if (isMediaDialog || isLoading) return "";
 
+        const titleHtml = this.options.title === false ? "" : `
+          <div class="dialog-header">
+            <span class="dialog-title">${typeof this.options.title === 'string' ? this.options.title : ''}</span>
+          </div>
+        `;
+
+        const closeHtml = this.options.showClose ? '<span class="dialog-close"></span>' : "";
+
         return `
-      <div class="dialog-header">
-        <span class="dialog-title">${this.options.title}</span>
-        ${this.options.showClose ? '<span class="dialog-close"></span>' : ""}
-      </div>
-    `;
+          ${titleHtml}
+          ${closeHtml}
+        `;
     }
 
     /**
      * 获取弹窗底部 HTML
      * 包含确认和取消按钮
-     * @returns 如果禁用底部按钮或是特殊类型则返回空字符串，否则返回底部按钮 HTML
+     * @returns 如果是特殊类型或没有按钮需要显示则返回空字符串，否则返回底部按钮 HTML
      */
     private getFooterHtml(): string {
         const isMediaDialog = this.options.type === "media";
         const isLoading = this.options.type === "loading";
+        const isMessage = this.options.type === "message";
 
-        if (!this.options.showFooter || isMediaDialog || isLoading) return "";
+        // 特殊类型的弹窗不显示底部按钮
+        if (isMediaDialog || isLoading || isMessage) return "";
+
+        const showConfirm = this.options.confirmText !== false;
+        const showCancel = this.options.cancelText !== false;
+
+        // 如果两个按钮都不显示，则不显示底部区域
+        if (!showConfirm && !showCancel) return "";
 
         return `
       <div class="dialog-footer">
-        <button class="dialog-btn dialog-cancel">
-          ${this.options.cancelText}
-        </button>
-        <button class="dialog-btn dialog-confirm">
-          ${this.options.confirmText}
-        </button>
+        ${showCancel ? `
+          <button class="dialog-btn dialog-cancel">
+            ${this.options.cancelText || IEDialog.defaults.cancelText}
+          </button>
+        ` : ''}
+        ${showConfirm ? `
+          <button class="dialog-btn dialog-confirm">
+            ${this.options.confirmText || IEDialog.defaults.confirmText}
+          </button>
+        ` : ''}
       </div>
     `;
     }
@@ -652,7 +665,8 @@ export class IEDialog {
      */
     public static image(url: string, options?: Partial<Omit<DialogOptions, 'type' | 'mediaList'>> | string): IEDialog {
         const opts = typeof options === 'string' ? { title: options } : options;
-        return IEDialog.media([{ type: 'image', url, title: opts?.title }], opts);
+        const mediaTitle = typeof opts?.title === 'string' ? opts.title : undefined;
+        return IEDialog.media([{ type: 'image', url, title: mediaTitle }], opts);
     }
 
     /**
@@ -662,6 +676,7 @@ export class IEDialog {
      */
     public static video(url: string, options?: Partial<Omit<DialogOptions, 'type' | 'mediaList'>> | string): IEDialog {
         const opts = typeof options === 'string' ? { title: options } : options;
-        return IEDialog.media([{ type: 'video', url, title: opts?.title }], opts);
+        const mediaTitle = typeof opts?.title === 'string' ? opts.title : undefined;
+        return IEDialog.media([{ type: 'video', url, title: mediaTitle }], opts);
     }
 }

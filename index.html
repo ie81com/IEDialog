@@ -177,13 +177,23 @@
 
   <div class="demo-section">
     <div class="demo-title">基础弹窗</div>
-    <div class="demo-desc">最基本的弹窗，可以自定义标题和内容。支持显示/隐藏图标、关闭按钮等。</div>
+    <div class="demo-desc">基本的弹窗功能，支持显示/隐藏标题栏、关闭按钮、确认/取消按钮等，可自定义按钮文本、回调函数和 HTML 内容。</div>
     <div class="btn-group">
       <button id="basic-dialog">基本弹窗</button>
       <button id="no-close-dialog">无关闭按钮</button>
+      <button id="no-title-dialog">无标题栏</button>
+      <button id="no-title-with-close">无标题有关闭</button>
+      <button id="no-confirm-btn">无确认按钮</button>
+      <button id="no-cancel-btn">无取消按钮</button>
+      <button id="no-footer-dialog">无底部按钮</button>
       <button id="with-icon-dialog">显示图标</button>
       <button id="custom-width-dialog">自定义宽度</button>
+      <button id="confirm-dialog">确认操作</button>
+      <button id="custom-btn-dialog">自定义按钮</button>
+      <button id="no-mask-close-dialog">禁止遮罩关闭</button>
       <button id="long-text-dialog">超长文本</button>
+      <button id="custom-html-dialog">HTML 内容</button>
+      <button id="form-dialog">表单示例</button>
     </div>
   </div>
 
@@ -195,17 +205,6 @@
       <button id="success-dialog">成功弹窗</button>
       <button id="warning-dialog">警告弹窗</button>
       <button id="error-dialog">错误弹窗</button>
-    </div>
-  </div>
-
-  <div class="demo-section">
-    <div class="demo-title">交互功能</div>
-    <div class="demo-desc">支持确认/取消按钮，可以自定义按钮文本和回调函数。支持点击遮罩层关闭。</div>
-    <div class="btn-group">
-      <button id="confirm-dialog">确认操作</button>
-      <button id="custom-btn-dialog">自定义按钮</button>
-      <button id="no-mask-close-dialog">禁止遮罩关闭</button>
-      <button id="no-footer-dialog">无底部按钮</button>
     </div>
   </div>
 
@@ -254,15 +253,6 @@
     <div class="btn-group">
       <button id="loading-dialog">默认加载</button>
       <button id="loading-text-dialog">自定义文本</button>
-    </div>
-  </div>
-
-  <div class="demo-section">
-    <div class="demo-title">自定义 HTML 内容</div>
-    <div class="demo-desc">支持在弹窗中使用自定义的 HTML 内容，可以创建更丰富的交互界面。</div>
-    <div class="btn-group">
-      <button id="custom-html-dialog">HTML 示例</button>
-      <button id="form-dialog">表单示例</button>
     </div>
   </div>
 

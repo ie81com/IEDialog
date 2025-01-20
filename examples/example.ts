@@ -13,6 +13,38 @@ document.getElementById("no-close-dialog")?.addEventListener("click", () => {
     });
 });
 
+document.getElementById("no-title-dialog")?.addEventListener("click", () => {
+    IEDialog.modal("这个弹窗没有标题栏", {
+        title: false,
+    });
+});
+
+document.getElementById("no-title-with-close")?.addEventListener("click", () => {
+    IEDialog.modal("这个弹窗没有标题栏但有关闭按钮", {
+        title: false,
+        showClose: true,
+    });
+});
+
+document.getElementById("no-confirm-btn")?.addEventListener("click", () => {
+    IEDialog.modal("这个弹窗没有确认按钮", {
+        confirmText: false,
+    });
+});
+
+document.getElementById("no-cancel-btn")?.addEventListener("click", () => {
+    IEDialog.modal("这个弹窗没有取消按钮", {
+        cancelText: false,
+    });
+});
+
+document.getElementById("no-footer-dialog")?.addEventListener("click", () => {
+    IEDialog.modal("这个弹窗没有底部按钮", {
+        confirmText: false,
+        cancelText: false,
+    });
+});
+
 document.getElementById("with-icon-dialog")?.addEventListener("click", () => {
     IEDialog.modal("这个弹窗显示图标", {
         showIcon: true,
@@ -22,6 +54,33 @@ document.getElementById("with-icon-dialog")?.addEventListener("click", () => {
 document.getElementById("custom-width-dialog")?.addEventListener("click", () => {
     IEDialog.modal("这个弹窗使用自定义宽度", {
         width: "600px",
+    });
+});
+
+document.getElementById("confirm-dialog")?.addEventListener("click", () => {
+    IEDialog.modal("确定要删除这条记录吗？", {
+        title: "删除确认",
+        style: "warning",
+        maskClosable: false,
+        showClose: false,
+        onConfirm: () => console.log("确认删除"),
+    });
+});
+
+document.getElementById("custom-btn-dialog")?.addEventListener("click", () => {
+    IEDialog.modal("这是一个自定义按钮的弹窗", {
+        title: "自定义按钮",
+        confirmText: "知道了",
+        cancelText: "关闭",
+        onConfirm: () => console.log("点击知道了"),
+        onCancel: () => console.log("点击关闭"),
+    });
+});
+
+document.getElementById("no-mask-close-dialog")?.addEventListener("click", () => {
+    IEDialog.modal("这个弹窗禁止点击遮罩层关闭", {
+        maskClosable: false,
+        showClose: true,
     });
 });
 
@@ -109,6 +168,7 @@ document.getElementById("long-text-dialog")?.addEventListener("click", () => {
         }
     );
 });
+
 /**
  * 不同风格的弹窗示例
  */
@@ -126,42 +186,6 @@ document.getElementById("warning-dialog")?.addEventListener("click", () => {
 
 document.getElementById("error-dialog")?.addEventListener("click", () => {
     IEDialog.modal("操作失败，请重试。", "error");
-});
-
-/**
- * 交互功能示例
- */
-document.getElementById("confirm-dialog")?.addEventListener("click", () => {
-    IEDialog.modal("确定要删除这条记录吗？", {
-        title: "删除确认",
-        style: "warning",
-        maskClosable: false,
-        showClose: false,
-        onConfirm: () => console.log("确认删除"),
-    });
-});
-
-document.getElementById("custom-btn-dialog")?.addEventListener("click", () => {
-    IEDialog.modal("这是一个自定义按钮的弹窗", {
-        title: "自定义按钮",
-        confirmText: "知道了",
-        cancelText: "关闭",
-        onConfirm: () => console.log("点击知道了"),
-        onCancel: () => console.log("点击关闭"),
-    });
-});
-
-document.getElementById("no-mask-close-dialog")?.addEventListener("click", () => {
-    IEDialog.modal("这个弹窗禁止点击遮罩层关闭", {
-        maskClosable: false,
-        showClose: true,
-    });
-});
-
-document.getElementById("no-footer-dialog")?.addEventListener("click", () => {
-    IEDialog.modal("这个弹窗没有底部按钮", {
-        showFooter: false,
-    });
 });
 
 /**
