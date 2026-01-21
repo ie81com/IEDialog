@@ -1,18 +1,18 @@
-var p = Object.defineProperty;
-var m = (l, t, s) => t in l ? p(l, t, { enumerable: !0, configurable: !0, writable: !0, value: s }) : l[t] = s;
-var n = (l, t, s) => m(l, typeof t != "symbol" ? t + "" : t, s);
-const o = class o {
+var m = Object.defineProperty;
+var p = (l, t, s) => t in l ? m(l, t, { enumerable: !0, configurable: !0, writable: !0, value: s }) : l[t] = s;
+var a = (l, t, s) => p(l, typeof t != "symbol" ? t + "" : t, s);
+const n = class n {
   constructor(t) {
-    n(this, "element");
-    n(this, "options");
-    n(this, "closeTimer");
-    n(this, "isClosing", !1);
-    n(this, "isProcessing", !1);
-    const s = t.type || "modal", e = t.style || "default";
+    a(this, "element");
+    a(this, "options");
+    a(this, "closeTimer");
+    a(this, "isClosing", !1);
+    a(this, "isProcessing", !1);
+    const s = t.type || "modal", e = t.style || "default", i = n.styles[e].title;
     this.options = {
-      ...o.defaults,
-      ...o.presets[s],
-      title: t.title || o.styles[e].title,
+      ...n.defaults,
+      ...n.presets[s],
+      title: t.title === !1 ? !1 : t.title || i,
       showIcon: e !== "default",
       ...t
     }, this.init();
@@ -22,7 +22,7 @@ const o = class o {
    * 创建 DOM 元素，设置样式和内容，绑定事件
    */
   init() {
-    this.element = document.createElement("div"), this.element.className = this.getContainerClass(), this.element.style.zIndex = (o.zIndex++).toString();
+    this.element = document.createElement("div"), this.element.className = this.getContainerClass(), this.element.style.zIndex = (n.zIndex++).toString();
     const t = this.options.type === "message" ? this.getMessageHtml() : this.getDialogHtml();
     this.element.innerHTML = t, this.bindEvents(), document.body.appendChild(this.element), this.handleAfterRender();
   }
@@ -59,32 +59,42 @@ const o = class o {
   /**
    * 获取弹窗头部 HTML
    * 包含标题和关闭按钮（如果启用）
-   * @returns 对于媒体类型和 loading 类型返回空字符串，否则返回头部 HTML
+   * @returns 对于媒体类型、loading类型时返回空字符串，否则返回头部 HTML
    */
   getHeaderHtml() {
     const t = this.options.type === "media", s = this.options.type === "loading";
-    return t || s ? "" : `
-      <div class="dialog-header">
-        <span class="dialog-title">${this.options.title}</span>
-        ${this.options.showClose ? '<span class="dialog-close"></span>' : ""}
-      </div>
-    `;
+    if (t || s) return "";
+    const e = this.options.title === !1 ? "" : `
+          <div class="dialog-header">
+            <span class="dialog-title">${typeof this.options.title == "string" ? this.options.title : ""}</span>
+          </div>
+        `, i = this.options.showClose ? '<span class="dialog-close"></span>' : "";
+    return `
+          ${e}
+          ${i}
+        `;
   }
   /**
    * 获取弹窗底部 HTML
    * 包含确认和取消按钮
-   * @returns 如果禁用底部按钮或是特殊类型则返回空字符串，否则返回底部按钮 HTML
+   * @returns 如果是特殊类型或没有按钮需要显示则返回空字符串，否则返回底部按钮 HTML
    */
   getFooterHtml() {
-    const t = this.options.type === "media", s = this.options.type === "loading";
-    return !this.options.showFooter || t || s ? "" : `
+    const t = this.options.type === "media", s = this.options.type === "loading", e = this.options.type === "message";
+    if (t || s || e) return "";
+    const i = this.options.confirmText !== !1, o = this.options.cancelText !== !1;
+    return !i && !o ? "" : `
       <div class="dialog-footer">
-        <button class="dialog-btn dialog-cancel">
-          ${this.options.cancelText}
-        </button>
-        <button class="dialog-btn dialog-confirm">
-          ${this.options.confirmText}
-        </button>
+        ${o ? `
+          <button class="dialog-btn dialog-cancel">
+            ${this.options.cancelText || n.defaults.cancelText}
+          </button>
+        ` : ""}
+        ${i ? `
+          <button class="dialog-btn dialog-confirm">
+            ${this.options.confirmText || n.defaults.confirmText}
+          </button>
+        ` : ""}
       </div>
     `;
   }
@@ -120,7 +130,7 @@ const o = class o {
                 `;
       case "media":
         if (!((t = this.options.mediaList) != null && t.length)) return "";
-        const i = this.options.mediaList[this.options.currentIndex || 0], a = (((s = this.options.mediaList) == null ? void 0 : s.length) || 0) > 1;
+        const i = this.options.mediaList[this.options.currentIndex || 0], o = (((s = this.options.mediaList) == null ? void 0 : s.length) || 0) > 1;
         return `
                 <div class="dialog-media-wrapper">
                     <div class="dialog-media-loading">
@@ -147,7 +157,7 @@ const o = class o {
                             onerror="this.onerror=null;this.parentElement.classList.add('error');this.innerHTML='加载失败'"
                         ></video>
                     `}
-                    ${a ? `
+                    ${o ? `
                         <div class="media-navigation">
                             <button class="media-prev" ${this.options.currentIndex === 0 ? "disabled" : ""}></button>
                             <button class="media-next" ${(this.options.currentIndex || 0) === (((e = this.options.mediaList) == null ? void 0 : e.length) || 0) - 1 ? "disabled" : ""}></button>
@@ -155,7 +165,7 @@ const o = class o {
                     ` : ""}
                 </div>`;
       default:
-        return /<[a-z][\s\S]*>/i.test(this.options.content) ? this.options.content : `${this.options.showIcon ? '<div class="dialog-icon"></div>' : ""}<div class="dialog-message">${this.options.content}</div>`;
+        return `${this.options.showIcon ? '<div class="dialog-icon"></div>' : ""}<div class="dialog-message">${this.options.content}</div>`;
     }
   }
   /**
@@ -207,7 +217,7 @@ const o = class o {
           try {
             this.isProcessing = !0, this.setButtonLoading(!0), await this.options.onConfirm(), this.close();
           } catch (e) {
-            console.error("Dialog confirm error:", e), o.message(e instanceof Error ? e.message : "操作失败", "error");
+            console.error("Dialog confirm error:", e), n.message(e instanceof Error ? e.message : "操作失败", "error");
           } finally {
             this.isProcessing = !1, this.setButtonLoading(!1);
           }
@@ -225,8 +235,8 @@ const o = class o {
     if (this.options.type === "media") {
       const e = this.element.querySelector("img, video");
       e && e.addEventListener("error", () => {
-        var i, a;
-        return (a = (i = this.options).onMediaError) == null ? void 0 : a.call(i);
+        var i, o;
+        return (o = (i = this.options).onMediaError) == null ? void 0 : o.call(i);
       });
     }
     if (this.options.type === "media" && this.options.mediaList && this.options.mediaList.length > 1) {
@@ -254,10 +264,10 @@ const o = class o {
         var d, c;
         return (c = (d = this.options).onMediaError) == null ? void 0 : c.call(d);
       });
-      const i = t.querySelector(".media-prev"), a = t.querySelector(".media-next");
+      const i = t.querySelector(".media-prev"), o = t.querySelector(".media-next");
       i == null || i.addEventListener("click", () => {
         this.options.currentIndex === void 0 || this.options.currentIndex <= 0 || (this.options.currentIndex--, this.updateMediaContent());
-      }), a == null || a.addEventListener("click", () => {
+      }), o == null || o.addEventListener("click", () => {
         !this.options.mediaList || this.options.currentIndex === void 0 || this.options.currentIndex >= this.options.mediaList.length - 1 || (this.options.currentIndex++, this.updateMediaContent());
       });
       const r = t.querySelector("video");
@@ -290,7 +300,7 @@ const o = class o {
    * @returns Dialog 实例
    */
   static open(t) {
-    return new o(t);
+    return new n(t);
   }
   /**
    * 打开模态框
@@ -299,11 +309,11 @@ const o = class o {
    * @returns Dialog 实例
    */
   static modal(t, s) {
-    return typeof s == "string" ? o.open({
+    return typeof s == "string" ? n.open({
       type: "modal",
       content: t,
       style: s
-    }) : o.open({
+    }) : n.open({
       type: "modal",
       content: t,
       ...s
@@ -316,13 +326,13 @@ const o = class o {
    * @returns Dialog 实例
    */
   static message(t, s) {
-    return typeof s == "string" ? o.open({
+    return typeof s == "string" ? n.open({
       type: "message",
       content: t,
       style: s,
       duration: 3e3,
       showIcon: !0
-    }) : o.open({
+    }) : n.open({
       type: "message",
       content: t,
       duration: 3e3,
@@ -336,7 +346,7 @@ const o = class o {
    * @returns Dialog 实例
    */
   static loading(t = "加载中...") {
-    return o.open({
+    return n.open({
       type: "loading",
       content: t
     });
@@ -348,7 +358,7 @@ const o = class o {
    * @returns Dialog 实例
    */
   static media(t, s) {
-    return o.open({
+    return n.open({
       type: "media",
       mediaList: t,
       content: "",
@@ -361,8 +371,8 @@ const o = class o {
    * @param options 配置选项或标题
    */
   static image(t, s) {
-    const e = typeof s == "string" ? { title: s } : s;
-    return o.media([{ type: "image", url: t, title: e == null ? void 0 : e.title }], e);
+    const e = typeof s == "string" ? { title: s } : s, i = typeof (e == null ? void 0 : e.title) == "string" ? e.title : void 0;
+    return n.media([{ type: "image", url: t, title: i }], e);
   }
   /**
    * 打开视频播放
@@ -370,12 +380,12 @@ const o = class o {
    * @param options 配置选项或标题
    */
   static video(t, s) {
-    const e = typeof s == "string" ? { title: s } : s;
-    return o.media([{ type: "video", url: t, title: e == null ? void 0 : e.title }], e);
+    const e = typeof s == "string" ? { title: s } : s, i = typeof (e == null ? void 0 : e.title) == "string" ? e.title : void 0;
+    return n.media([{ type: "video", url: t, title: i }], e);
   }
 };
-n(o, "zIndex", 1e3), // 默认配置
-n(o, "defaults", {
+a(n, "zIndex", 1e3), // 默认配置
+a(n, "defaults", {
   type: "modal",
   style: "info",
   title: "提示",
@@ -386,25 +396,21 @@ n(o, "defaults", {
   width: "300px",
   showMask: !0,
   maskClosable: !0,
-  showFooter: !0,
   duration: 3e3
 }), // 预设配置
-n(o, "presets", {
+a(n, "presets", {
   modal: {
     showMask: !0,
     showClose: !0,
-    showFooter: !0,
     maskClosable: !0
   },
   message: {
     showMask: !1,
     showClose: !0,
-    showFooter: !1,
     maskClosable: !1
   },
   media: {
     title: "媒体预览",
-    showFooter: !1,
     width: "40%",
     showClose: !0,
     maskClosable: !0,
@@ -413,19 +419,17 @@ n(o, "presets", {
   loading: {
     showMask: !0,
     showClose: !1,
-    showFooter: !1,
-    maskClosable: !1,
     showIcon: !1
   }
 }), // 风格配置
-n(o, "styles", {
+a(n, "styles", {
   default: { title: "提示" },
   info: { title: "提示" },
   success: { title: "成功" },
   warning: { title: "警告" },
   error: { title: "错误" }
 });
-let h = o;
+let h = n;
 export {
   h as IEDialog
 };
