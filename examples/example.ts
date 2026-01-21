@@ -187,6 +187,9 @@ document.getElementById("warning-dialog")?.addEventListener("click", () => {
 document.getElementById("error-dialog")?.addEventListener("click", () => {
     IEDialog.modal("操作失败，请重试。", "error");
 });
+document.getElementById("error-dialog2")?.addEventListener("click", () => {
+    IEDialog.modal("操作失败，请重试。<br>这是一条html消息", "error");
+});
 
 /**
  * 消息提示示例

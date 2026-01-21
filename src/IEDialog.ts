@@ -323,11 +323,8 @@ export class IEDialog {
                     ` : ''}
                 </div>`;
             default:
-                // 检查内容是否为 HTML
-                const isHTML = /<[a-z][\s\S]*>/i.test(this.options.content);
-                return isHTML
-                    ? this.options.content
-                    : `${this.options.showIcon ? `<div class="dialog-icon"></div>` : ""}<div class="dialog-message">${this.options.content}</div>`;
+                // 无论是HTML还是纯文本，都统一处理，让innerHTML自动解析HTML
+                return `${this.options.showIcon ? `<div class="dialog-icon"></div>` : ""}<div class="dialog-message">${this.options.content}</div>`;
         }
     }
 
