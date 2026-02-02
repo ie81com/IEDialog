@@ -62,6 +62,9 @@
                             <button class="media-next" ${(this.options.currentIndex||0)===(((e=this.options.mediaList)==null?void 0:e.length)||0)-1?"disabled":""}></button>
                         </div>
                     `:""}
+                    ${i.title?`
+                        <div class="media-title">${i.title}</div>
+                    `:""}
                 </div>`;default:return`${this.options.showIcon?'<div class="dialog-icon"></div>':""}<div class="dialog-message">${this.options.content}</div>`}}handleAfterRender(){if(this.options.type==="message"&&this.options.duration&&this.options.duration>0){const t=this.element.querySelector(".message-progress");t&&requestAnimationFrame(()=>{t.style.setProperty("--duration",`${this.options.duration}ms`),t.classList.add("active")}),this.closeTimer=window.setTimeout(()=>this.close(),this.options.duration),requestAnimationFrame(()=>this.element.classList.add("message-show"))}else this.options.type==="message"&&requestAnimationFrame(()=>this.element.classList.add("message-show"))}getContainerClass(){const t=["dialog-container"];return this.options.type==="message"&&t.push("dialog-message-container"),this.options.type==="loading"&&t.push("dialog-loading"),t.join(" ")}getWrapperStyle(){const t=[];return this.options.type==="media"?t.push(`width: ${this.options.width||"80%"}`):t.push(`width: ${this.options.width}`),t.join(";")}getMessageHtml(){return`
           <div class="message-wrapper message-${this.options.style||"info"}">
             ${this.options.showIcon?'<span class="message-icon"></span>':""}

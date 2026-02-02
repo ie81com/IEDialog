@@ -163,6 +163,9 @@ const n = class n {
                             <button class="media-next" ${(this.options.currentIndex || 0) === (((e = this.options.mediaList) == null ? void 0 : e.length) || 0) - 1 ? "disabled" : ""}></button>
                         </div>
                     ` : ""}
+                    ${i.title ? `
+                        <div class="media-title">${i.title}</div>
+                    ` : ""}
                 </div>`;
       default:
         return `${this.options.showIcon ? '<div class="dialog-icon"></div>' : ""}<div class="dialog-message">${this.options.content}</div>`;

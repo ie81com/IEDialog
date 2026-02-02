@@ -321,6 +321,9 @@ export class IEDialog {
                             <button class="media-next" ${(this.options.currentIndex || 0) === (this.options.mediaList?.length || 0) - 1 ? 'disabled' : ''}></button>
                         </div>
                     ` : ''}
+                    ${currentMedia.title ? `
+                        <div class="media-title">${currentMedia.title}</div>
+                    ` : ''}
                 </div>`;
             default:
                 // 无论是HTML还是纯文本，都统一处理，让innerHTML自动解析HTML

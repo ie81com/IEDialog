@@ -53,7 +53,7 @@ document.getElementById("with-icon-dialog")?.addEventListener("click", () => {
 
 document.getElementById("custom-width-dialog")?.addEventListener("click", () => {
     IEDialog.modal("这个弹窗使用自定义宽度", {
-        width: "600px",
+        width: "1400px",
     });
 });
 
