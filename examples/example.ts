@@ -74,6 +74,7 @@ document.getElementById("custom-btn-dialog")?.addEventListener("click", () => {
         cancelText: "关闭",
         onConfirm: () => console.log("点击知道了"),
         onCancel: () => console.log("点击关闭"),
+        onOpen: () => console.log("弹窗已打开"),
     });
 });
 
@@ -260,6 +261,7 @@ document.getElementById("image-dialog")?.addEventListener("click", () => {
         ],
         {
             onMediaError: () => IEDialog.message("图片加载失败", "error"),
+            onOpen: () => console.log("图片预览已打开"),
         }
     );
 });
@@ -459,6 +461,16 @@ document.getElementById("form-dialog")?.addEventListener("click", () => {
             title: "表单示例",
             width: "500px",
             confirmText: "提交",
+            onOpen: () => {
+                console.log("表单弹窗已打开，可以初始化表单数据");
+                const form = document.getElementById("customForm") as HTMLFormElement;
+                if (form) {
+                    const usernameInput = form.querySelector('input[name="username"]') as HTMLInputElement;
+                    if (usernameInput) {
+                        usernameInput.focus();
+                    }
+                }
+            },
             onConfirm: async () => {
                 const form = document.getElementById("customForm") as HTMLFormElement;
                 if (form) {
@@ -482,4 +494,18 @@ document.getElementById("form-dialog")?.addEventListener("click", () => {
             },
         }
     );
+});
+
+// onOpen 回调示例
+document.getElementById("onopen-dialog")?.addEventListener("click", () => {
+    IEDialog.modal("这是一个演示 onOpen 回调的弹窗", {
+        title: "onOpen 回调示例",
+        onOpen: () => {
+            console.log("弹窗已成功打开！");
+            IEDialog.message("弹窗打开成功！", "success");
+        },
+        onClose: () => {
+            console.log("弹窗已关闭");
+        },
+    });
 });

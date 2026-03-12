@@ -130,6 +130,58 @@ IEDialog.modal('确定要提交数据吗？', {
         }
     }
 });
+
+// 打开回调示例
+IEDialog.modal('这是一个演示打开回调的弹窗', {
+    title: '打开回调示例',
+    onOpen: () => {
+        console.log('弹窗已成功打开！');
+        // 可以在这里执行一些初始化操作
+    },
+    onClose: () => {
+        console.log('弹窗已关闭');
+    }
+});
+
+// 表单自动聚焦示例
+IEDialog.modal(`
+    <div class="custom-form-content">
+        <form id="customForm">
+            <div class="form-group">
+                <label>用户名</label>
+                <input type="text" name="username" placeholder="请输入用户名">
+            </div>
+            <div class="form-group">
+                <label>密码</label>
+                <input type="password" name="password" placeholder="请输入密码">
+            </div>
+        </form>
+    </div>
+`, {
+    title: '表单示例',
+    width: '500px',
+    confirmText: '提交',
+    onOpen: () => {
+        // 弹窗打开时自动聚焦到第一个输入框
+        const form = document.getElementById('customForm') as HTMLFormElement;
+        if (form) {
+            const usernameInput = form.querySelector('input[name="username"]') as HTMLInputElement;
+            if (usernameInput) {
+                usernameInput.focus();
+            }
+        }
+    },
+    async onConfirm() {
+        const form = document.getElementById('customForm') as HTMLFormElement;
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData);
+
+        if (!data.username) throw new Error('请输入用户名');
+        if (!data.password) throw new Error('请输入密码');
+
+        await submitForm(data);
+    }
+});
 ```
 
 #### 加载提示
@@ -185,7 +237,10 @@ IEDialog.media([
 ], {
     currentIndex: 0,  // 从第一个开始预览
     width: '80%',
-    onMediaError: () => IEDialog.message('媒体加载失败', 'error')
+    onMediaError: () => IEDialog.message('媒体加载失败', 'error'),
+    onOpen: () => {
+        console.log('媒体预览已打开');
+    }
 });
 ```
 
@@ -281,6 +336,9 @@ interface DialogOptions {
 
     /** 关闭回调 */
     onClose?: () => void;
+
+    /** 打开成功回调 */
+    onOpen?: () => void;
 
     /** 媒体列表配置 */
     mediaList?: MediaItem[];
@@ -387,6 +445,7 @@ const defaults = {
 3. 媒体预览支持加载失败的错误处理和加载动画
 4. 所有的回调函数都是可选的，支持异步函数
 5. 图片和视频预览时会自动调整尺寸，确保不超出视窗
+6. `onOpen` 回调在弹窗初始化完成后立即触发，可以用于执行初始化操作（如表单聚焦、数据加载等）
 
 ## 许可证
 

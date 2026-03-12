@@ -49,6 +49,8 @@ interface DialogOptions {
     onCancel?: () => void;
     /** 关闭回调 */
     onClose?: () => void;
+    /** 打开成功回调 */
+    onOpen?: () => void;
     /** 媒体列表 */
     mediaList?: MediaItem[];
     /** 当前媒体索引 */
@@ -154,6 +156,8 @@ export class IEDialog {
         document.body.appendChild(this.element);
 
         this.handleAfterRender();
+
+        this.options.onOpen?.();
     }
 
     /**

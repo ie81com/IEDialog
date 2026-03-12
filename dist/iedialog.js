@@ -1,6 +1,6 @@
-var m = Object.defineProperty;
-var p = (l, t, s) => t in l ? m(l, t, { enumerable: !0, configurable: !0, writable: !0, value: s }) : l[t] = s;
-var a = (l, t, s) => p(l, typeof t != "symbol" ? t + "" : t, s);
+var p = Object.defineProperty;
+var m = (l, t, s) => t in l ? p(l, t, { enumerable: !0, configurable: !0, writable: !0, value: s }) : l[t] = s;
+var a = (l, t, s) => m(l, typeof t != "symbol" ? t + "" : t, s);
 const n = class n {
   constructor(t) {
     a(this, "element");
@@ -22,9 +22,10 @@ const n = class n {
    * 创建 DOM 元素，设置样式和内容，绑定事件
    */
   init() {
+    var s, e;
     this.element = document.createElement("div"), this.element.className = this.getContainerClass(), this.element.style.zIndex = (n.zIndex++).toString();
     const t = this.options.type === "message" ? this.getMessageHtml() : this.getDialogHtml();
-    this.element.innerHTML = t, this.bindEvents(), document.body.appendChild(this.element), this.handleAfterRender();
+    this.element.innerHTML = t, this.bindEvents(), document.body.appendChild(this.element), this.handleAfterRender(), (e = (s = this.options).onOpen) == null || e.call(s);
   }
   /**
    * 获取弹窗的完整 HTML
